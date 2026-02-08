@@ -1,47 +1,48 @@
 package dev.jvsmaior.blog_api.controller;
 
 import dev.jvsmaior.blog_api.entity.BlogPost;
-import dev.jvsmaior.blog_api.repository.BlogPostRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import dev.jvsmaior.blog_api.service.BlogPostService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@RequestMapping("/blogPosts")
 public class BlogPostController {
 
-    private final BlogPostRepository repository;
+    private final BlogPostService service;
 
-    public BlogPostController(BlogPostRepository repository) {
-        this.repository = repository;
+    public BlogPostController(BlogPostService service) {
+        this.service = service;
     }
 
-    @GetMapping("/BlogPosts")
+    @GetMapping
     public List<BlogPost> getAllBlogPosts(){
-        return repository.findAll();
+        return service.getAllBlogPosts();
     }
 
-    @PostMapping("/BlogPosts")
-    public BlogPost saveBlogPost(@RequestBody BlogPost blogPost){
-        return repository.save(blogPost);
+    @GetMapping("/{id}")
+    public ResponseEntity<BlogPost> getBlogPostById(@PathVariable Long id){
+        BlogPost blogPost = service.getBlogPostById(id);
+        return ResponseEntity.ok(blogPost);
     }
 
-    @PutMapping("/BlogPosts/{id}")
-    public BlogPost updateBlogPost(@RequestBody BlogPost updatedBlogPost, @PathVariable Long id){
-
-        BlogPost existing = repository.findById(id).orElseThrow();
-
-        existing.setAuthorName(updatedBlogPost.getAuthorName());
-        existing.setTitle(updatedBlogPost.getTitle());
-        existing.setContent(updatedBlogPost.getContent());
-
-        existing.setLastModifiedAt(LocalDateTime.now());
-
-        return repository.save(existing);
+    @PostMapping
+    public ResponseEntity<BlogPost> saveBlogPost(@RequestBody BlogPost blogPost){
+        BlogPost savedBlogPost = service.saveBlogPost(blogPost);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedBlogPost);
     }
 
-    @DeleteMapping("/BlogPosts/{id}")
+    @PutMapping("/{id}")
+    public ResponseEntity<BlogPost> updateBlogPost(@RequestBody BlogPost updatedBlogPost, @PathVariable Long id){
+        BlogPost updated = service.updateBlogPost(updatedBlogPost, id);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteBlogPost(@PathVariable Long id){
-        repository.deleteById(id);
+        service.deleteBlogPost(id);
     }
 }
