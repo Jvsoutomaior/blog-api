@@ -1,7 +1,11 @@
 package dev.jvsmaior.blog_api.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
+
 
 @Entity
 public class BlogPost {
@@ -10,13 +14,18 @@ public class BlogPost {
     private Long id;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 50)
+    @NotBlank(message = "Author Name (authorName) is mandatory")
     private String authorName;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 50)
+    @NotBlank(message = "title is mandatory")
     private String title;
 
     @Lob
     @Column(nullable = false)
+    @NotBlank(message = "blog content is mandatory")
     private String content;
 
     @Column(nullable = false)

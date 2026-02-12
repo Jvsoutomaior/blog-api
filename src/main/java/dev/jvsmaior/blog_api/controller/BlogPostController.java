@@ -1,6 +1,7 @@
 package dev.jvsmaior.blog_api.controller;
 
 import dev.jvsmaior.blog_api.entity.BlogPost;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +31,13 @@ public class BlogPostController {
     }
 
     @PostMapping
-    public ResponseEntity<BlogPost> saveBlogPost(@RequestBody BlogPost blogPost){
+    public ResponseEntity<BlogPost> saveBlogPost(@Valid @RequestBody BlogPost blogPost){
         BlogPost savedBlogPost = service.saveBlogPost(blogPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBlogPost);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BlogPost> updateBlogPost(@RequestBody BlogPost updatedBlogPost, @PathVariable Long id){
+    public ResponseEntity<BlogPost> updateBlogPost(@Valid @RequestBody BlogPost updatedBlogPost, @PathVariable Long id){
         BlogPost updated = service.updateBlogPost(updatedBlogPost, id);
         return ResponseEntity.ok(updated);
     }
