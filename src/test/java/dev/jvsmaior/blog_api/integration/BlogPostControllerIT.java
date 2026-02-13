@@ -1,9 +1,9 @@
 package dev.jvsmaior.blog_api.integration;
 
-import dev.jvsmaior.blog_api.entity.BlogPost;
+import dev.jvsmaior.blog_api.dto.BlogPostRequest;
+import dev.jvsmaior.blog_api.dto.BlogPostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.web.servlet.client.RestTestClient;
@@ -26,7 +26,7 @@ public class BlogPostControllerIT {
     void shouldCreateBlogPosts(){
         client.post()
                 .uri("/blogPosts")
-                .body(new BlogPost("Author", "Title", "Content"))
+                .body(new BlogPostRequest("Author", "Title", "Content"))
                 .exchange().expectStatus().isCreated();
     }
 
@@ -35,20 +35,19 @@ public class BlogPostControllerIT {
         client.get().uri("/blogPosts")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<List<BlogPost>>() {}).value(blogPosts -> assertThat(blogPosts).hasSize(1));
-
+                .expectBody(new ParameterizedTypeReference<List<BlogPostResponse>>() {}).value(blogPosts -> assertThat(blogPosts).hasSize(1));
     }
 
     @Test
     void shouldUpdateBlogPost(){
-        BlogPost updated = new BlogPost("Author", "Updated Title", "Updated Content");
+        BlogPostRequest updated = new BlogPostRequest("Author", "Updated Title", "Updated Content");
         client.put()
                 .uri("/blogPosts/1")
                 .body(updated)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(BlogPost.class)
-                .value(blogPost -> assertThat(blogPost.getTitle()).isEqualTo("Updated Title"));
+                .expectBody(BlogPostResponse.class)
+                .value(blogPost -> assertThat(blogPost.title()).isEqualTo("Updated Title"));
     }
 
     @Test
@@ -61,9 +60,7 @@ public class BlogPostControllerIT {
                 .uri("/blogPosts")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(new ParameterizedTypeReference<List<BlogPost>>() {})
+                .expectBody(new ParameterizedTypeReference<List<BlogPostResponse>>() {})
                 .value(blogPosts -> assertThat(blogPosts).isEmpty());
     }
-
-
 }
