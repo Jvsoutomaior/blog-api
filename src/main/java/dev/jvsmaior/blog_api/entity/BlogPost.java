@@ -14,12 +14,12 @@ public class BlogPost {
     private Long id;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "Author name must be between 3 and 50 characters")
     @NotBlank(message = "Author Name (authorName) is mandatory")
     private String authorName;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters")
     @NotBlank(message = "title is mandatory")
     private String title;
 
