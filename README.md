@@ -34,6 +34,12 @@ Bash
 ./mvnw test
 ```
 
+### Misc
+
+```
+docker run -d   --name postgres-db   -e POSTGRES_USER=user   -e POSTGRES_PASSWORD=password   -e POSTGRES_DB=blogdb   -p 5432:5432   postgres:16
+```
+
 ## License
 
 This project is licensed under the terms of the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.

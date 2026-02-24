@@ -10,7 +10,7 @@ services:
         condition: service_healthy
 
   postgres:
-    image: postgres:latest
+    image: postgres:16
     environment:
       - POSTGRES_DB=blogdb
       - POSTGRES_USER=user
